@@ -1,42 +1,62 @@
 #include <iostream>
-#include <iomanip>
+#include <string>
+#include <map>
+#include <cctype>
+
 using namespace std;
 
-const int NUM_EXPERIMENTS = 3;
-const int NUM_READINGS = 3;
-
 int main() {
-    int i, j;
-    double readingValue, total, average;
+    
+    // Morse code map
+    map<char, string> morse = {
+        {'A', ".-"}, {'B', "-..."}, {'C', "-.-."},
+        {'D', "-.."}, {'E', "."}, {'F', "..-."},
+        {'G', "--."}, {'H', "...."}, {'I', ".."},
+        {'J', ".---"}, {'K', "-.-"}, {'L', ".-.."},
+        {'M', "--"}, {'N', "-."}, {'O', "---"},
+        {'P', ".--."}, {'Q', "--.-"}, {'R', ".-."},
+        {'S', "..."}, {'T', "-"}, {'U', "..-"},
+        {'V', "...-"}, {'W', ".--"}, {'X', "-..-"},
+        {'Y', "-.--"}, {'Z', "--.."},
+        {'0', "-----"}, {'1', ".----"}, {'2', "..---"},
+        {'3', "...--"}, {'4', "....-"}, {'5', "....."},
+        {'6', "-...."}, {'7', "--..."}, {'8', "---.."},
+        {'9', "----."}
+    };
 
-    for (i = 1; i <= NUM_EXPERIMENTS; i++) {
-        total = 0;
-        cout << "\nEXPERIMENT " << i << endl;
-        cout << "===========\n";
+    string message;
+    string fullMorse = "";
 
-        for (j = 1; j <= NUM_READINGS; j++) {
-            cout << "Enter reading " << j << " value: ";
-            cin >> readingValue;
-            total += readingValue;  // Add to total
+    cout << "Enter a short message in English: ";
+    getline(cin, message);
+
+    cout << "\nMorse Code Translation:\n";
+
+    for (char ch : message) {
+
+        // Convert lowercase to uppercase
+        ch = toupper(ch);
+
+        // Ignore spaces in letter output
+        if (ch == ' ') {
+            fullMorse += "       "; // space between words
+            continue;
         }
 
-        average = total / NUM_READINGS;  // Correct average calculation
+        // Check if character exists in map
+        if (morse.find(ch) != morse.end()) {
 
-        // Evaluation logic
-        if (average < 100) {
-            cout << "Experiment " << i << " average: " 
-                 << fixed << setprecision(2) << average 
-                 << " is Below acceptable range\n";
-        } else if (average >= 100 && average <= 300) {
-            cout << "Experiment " << i << " average: " 
-                 << fixed << setprecision(2) << average 
-                 << " is Within acceptable range\n";
-        } else {
-            cout << "Experiment " << i << " average: " 
-                 << fixed << setprecision(2) << average 
-                 << " is Above acceptable range\n";
+            // Display each letter and Morse code
+            cout << ch << " : " << morse[ch] << endl;
+
+            // Add to full Morse message
+            fullMorse += morse[ch] + "   ";
         }
     }
+
+    // Display full Morse code message
+    cout << "\nFull Morse Code Message:\n";
+    cout << fullMorse << endl;
 
     return 0;
 }
